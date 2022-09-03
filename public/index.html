@@ -10,11 +10,43 @@
   </head>
   <body>
     <div ng-app="myApp" ng-controller="myCtrl">
+      Conexión:
+      <br />
       <input placeholder="Clockify Api Key" type="password" ng-model="clockifyApiKey" ng-change="testConnectionResult = ''" />
       <button ng-click="testConnection()">Probar conexión</button>
       <span>{{testConnectionResult}}</span>
       <br />
-      <button ng-click="process()">Procesar</button>
+      <br />
+      Ids:
+      <br />
+      <input placeholder="Id de espacio de trabajo" ng-model="workspaceId" id="workspaceId" />
+      <br />
+      <input placeholder="Id de proyecto" ng-model="projectId" id="projectId" />
+      <br />
+      <input placeholder="Id de tarea" ng-model="taskId" id="taskId" />
+      <br />
+      <br />
+      Rango horario:
+      <br />
+      Desde
+      <input placeholder="Hora" ng-model="startHour" size="2" /> :
+      <input placeholder="Minuto" ng-model="startMinute" size="2" />
+      <br />
+      Hasta
+      <input placeholder="Hora" ng-model="endHour" size="2" /> :
+      <input placeholder="Minuto" ng-model="endMinute" size="2" />
+      <br />
+      <br />
+      <button ng-click="generateRanges()">Generar rangos</button>
+
+      <ul>
+        <li ng-repeat="range in ranges">
+          <input type="checkbox" ng-model="range.selected" />
+          {{range.start}} - {{range.end}}
+        </li>
+      </ul>
+
+      <button ng-click="process()" ng-disabled="!ranges.length">Cargar estos rangos en Clockify!</button>
     </div>
   </body>
 </html>
