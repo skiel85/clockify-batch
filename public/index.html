@@ -10,7 +10,10 @@
   </head>
   <body>
     <div ng-app="myApp" ng-controller="myCtrl">
-      <input placeholder="Clockify Api Key" type="password" ng-model="clockifyApiKey" />
+      <input placeholder="Clockify Api Key" type="password" ng-model="clockifyApiKey" ng-change="testConnectionResult = ''" />
+      <button ng-click="testConnection()">Probar conexión</button>
+      <span>{{testConnectionResult}}</span>
+      <br />
       <button ng-click="process()">Procesar</button>
     </div>
   </body>
