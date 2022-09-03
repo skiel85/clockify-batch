@@ -19,11 +19,11 @@
       <br />
       Ids:
       <br />
-      <input placeholder="Id de espacio de trabajo" ng-model="workspaceId" id="workspaceId" />
+      <input placeholder="Id de espacio de trabajo" ng-model="workspaceId" id="workspaceId" size="24" />
       <br />
-      <input placeholder="Id de proyecto" ng-model="projectId" id="projectId" />
+      <input placeholder="Id de proyecto" ng-model="projectId" id="projectId" size="24" />
       <br />
-      <input placeholder="Id de tarea" ng-model="taskId" id="taskId" />
+      <input placeholder="Id de tarea" ng-model="taskId" id="taskId" size="24" />
       <br />
       <br />
       Rango horario:
@@ -43,6 +43,7 @@
         <li ng-repeat="range in ranges">
           <input type="checkbox" ng-model="range.selected" />
           {{range.start}} - {{range.end}}
+          {{range.result}}
         </li>
       </ul>
 

@@ -16,18 +16,17 @@ app.controller("myCtrl", function($scope) {
     $scope.testConnection = async function() {
         $scope.testConnectionResult = ""
 
-        let url = 'https://api.clockify.me/api/v1/workspaces';
+        let url = 'https://api.clockify.me/api/v1/workspaces'
         
         let response = await fetch(url, {
             headers: {
-            'X-Api-Key': $scope.clockifyApiKey
+                'X-Api-Key': $scope.clockifyApiKey
             }
         });
 
         if(response.ok) {
-            let commits = await response.json(); // read response body and parse as JSON
-        
-            console.log(commits);
+            let parsedResult = await response.json()
+            console.log(parsedResult)
             $scope.testConnectionResult = "🟢 OK"
         }
         else {
@@ -64,8 +63,46 @@ app.controller("myCtrl", function($scope) {
     }
     
     $scope.process = async function() {
+        const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
+        let url = 'https://api.clockify.me/api/v1/workspaces/'+$scope.workspaceId+'/time-entries'
 
+        for(let i = 0; i < $scope.ranges.length; i++) {
+            let range = $scope.ranges[i]
+
+            if(range.selected) {
+                console.log("Registrando: " + range.start + " - " + range.end + "...")
+
+                await delay(1000)
+    
+                let response = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Api-Key': $scope.clockifyApiKey
+                    },
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "start": range.start,
+                        "billable": "true",
+                        "description": "",
+                        "projectId": $scope.projectId,
+                        "taskId": $scope.taskId,
+                        "end": range.end
+                    })
+                });
+    
+                if(response.ok) {
+                    let parsedResult = await response.json()
+                    console.log(parsedResult)
+                    range.result = "🟢 OK"
+                }
+                else {
+                    range.result = "🔴 ERROR: " + response.status
+                    console.error(response)
+                }
+                $scope.$apply()
+            }
+        }
     }
 
 });
