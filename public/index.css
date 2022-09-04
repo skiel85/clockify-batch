@@ -1,0 +1,38 @@
+h2 {
+    margin-top: 20px;
+    font-size: 22px;
+}
+
+.form-control {
+    display: inline;
+    width: unset;
+}
+
+.connection-test {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.ids {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.time-range {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.time-range-row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.time-range label {
+    width: 60px;
+}

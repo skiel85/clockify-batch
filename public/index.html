@@ -5,49 +5,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Clockify Batch</title>
     
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <link href="index.css" rel="stylesheet">
     <script src="index.js"></script>
   </head>
   <body>
-    <div ng-app="myApp" ng-controller="myCtrl">
-      Conexión:
-      <br />
-      <input placeholder="Clockify Api Key" type="password" ng-model="clockifyApiKey" ng-change="testConnectionResult = ''" />
-      <button ng-click="testConnection()">Probar conexión</button>
-      <span>{{testConnectionResult}}</span>
-      <br />
-      <br />
-      Ids:
-      <br />
-      <input placeholder="Id de espacio de trabajo" ng-model="workspaceId" id="workspaceId" size="24" />
-      <br />
-      <input placeholder="Id de proyecto" ng-model="projectId" id="projectId" size="24" />
-      <br />
-      <input placeholder="Id de tarea" ng-model="taskId" id="taskId" size="24" />
-      <br />
-      <br />
-      Rango horario:
-      <br />
-      Desde
-      <input placeholder="Hora" ng-model="startHour" size="2" /> :
-      <input placeholder="Minuto" ng-model="startMinute" size="2" />
-      <br />
-      Hasta
-      <input placeholder="Hora" ng-model="endHour" size="2" /> :
-      <input placeholder="Minuto" ng-model="endMinute" size="2" />
-      <br />
-      <br />
-      <button ng-click="generateRanges()">Generar rangos</button>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <div ng-app="myApp" ng-controller="myCtrl" class="container">
 
+      <h2>Conexión</h2>
+      <div class="connection-test">
+          <input class="form-control" size="24" placeholder="Clockify Api Key" type="password" ng-model="clockifyApiKey" ng-change="testConnectionResult = ''" />
+          <button ng-click="testConnection()" class="btn btn-light">Probar conexión</button>
+          <span class="col-form-label">{{testConnectionResult}}</span>
+      </div>
+      <h2>Ids</h2>
+      <div class="ids">
+        <input class="form-control" placeholder="Id de espacio de trabajo" ng-model="workspaceId" id="workspaceId" size="24" />
+        <input class="form-control" placeholder="Id de proyecto" ng-model="projectId" id="projectId" size="24" />
+        <input class="form-control" placeholder="Id de tarea" ng-model="taskId" id="taskId" size="24" />
+      </div>
+      <h2>Horarios</h2>
+      <div class="time-range">
+        <div class="time-range-row">
+          <label>Desde</label>
+          <input class="form-control" placeholder="Hora" ng-model="startHour" size="2" />
+          <span class="time-range-separator">:</span>
+          <input class="form-control" placeholder="Minuto" ng-model="startMinute" size="2" />
+        </div>
+        <div class="time-range-row">
+          <label>Hasta</label>
+          <input class="form-control" placeholder="Hora" ng-model="endHour" size="2" />
+          <span class="time-range-separator">:</span>
+          <input class="form-control" placeholder="Minuto" ng-model="endMinute" size="2" />
+        </div>
+      </div>
+      <h2>Rangos</h2>
+      <button class="btn btn-primary" ng-click="generateRanges()">Generar rangos</button>
       <ul>
         <li ng-repeat="range in ranges">
-          <input type="checkbox" ng-model="range.selected" />
-          {{range.start}} - {{range.end}}
-          {{range.result}}
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" ng-model="range.selected" />
+            <label class="form-check-label">
+              {{range.start}} - {{range.end}}
+            </label>
+            <span>{{range.result}}</span>
+          </div>
         </li>
       </ul>
-
-      <button ng-click="process()" ng-disabled="!ranges.length">Cargar estos rangos en Clockify!</button>
+      <h2>Finalizar</h2>
+      <button class="btn btn-primary" ng-click="process()" ng-disabled="!ranges.length">¡Cargar los rangos seleccionados en Clockify!</button>
     </div>
   </body>
 </html>
