@@ -13,8 +13,40 @@ app.controller("myCtrl", function($scope) {
     $scope.endHour = "18"
     $scope.endMinute = "00"
 
+    $scope.workspaces = []
+
+    $scope.step = 0
+    $scope.procesando = false
+
     $scope.testConnection = async function() {
+        if(!$scope.clockifyApiKey) { return }
         $scope.testConnectionResult = ""
+
+        let url = 'https://api.clockify.me/api/v1/user'
+        
+        let response = await fetch(url, {
+            headers: {
+                'X-Api-Key': $scope.clockifyApiKey
+            }
+        });
+
+        if(response.ok) {
+            let parsedResult = await response.json()
+            console.log(parsedResult)
+            $scope.testConnectionResult = "🟢 Hola " + parsedResult.name + "."
+        }
+        else {
+            $scope.testConnectionResult = "🔴 ERROR: " + response.status
+            console.error(response)
+        }
+
+        $scope.$apply()
+    }
+
+    $scope.loadWorkspaces = async function() {
+        $scope.workspaces = []
+        $scope.projects = []
+        $scope.tasks = []
 
         let url = 'https://api.clockify.me/api/v1/workspaces'
         
@@ -27,10 +59,56 @@ app.controller("myCtrl", function($scope) {
         if(response.ok) {
             let parsedResult = await response.json()
             console.log(parsedResult)
-            $scope.testConnectionResult = "🟢 OK"
+            $scope.workspaces = parsedResult
         }
         else {
-            $scope.testConnectionResult = "🔴 ERROR: " + response.status
+            console.error(response)
+        }
+
+        $scope.$apply()
+    }
+
+    $scope.loadProjects = async function() {
+        $scope.projects = []
+        $scope.tasks = []
+
+        let url = 'https://api.clockify.me/api/v1/workspaces/' + $scope.workspaceId + "/projects"
+        
+        let response = await fetch(url, {
+            headers: {
+                'X-Api-Key': $scope.clockifyApiKey
+            }
+        });
+
+        if(response.ok) {
+            let parsedResult = await response.json()
+            console.log(parsedResult)
+            $scope.projects = parsedResult.filter(x => !x.archived)
+        }
+        else {
+            console.error(response)
+        }
+
+        $scope.$apply()
+    }
+
+    $scope.loadTasks = async function() {
+        $scope.tasks = []
+
+        let url = 'https://api.clockify.me/api/v1/workspaces/' + $scope.workspaceId + "/projects/" + $scope.projectId + "/tasks"
+        
+        let response = await fetch(url, {
+            headers: {
+                'X-Api-Key': $scope.clockifyApiKey
+            }
+        });
+
+        if(response.ok) {
+            let parsedResult = await response.json()
+            console.log(parsedResult)
+            $scope.tasks = parsedResult.filter(x => !x.archived)
+        }
+        else {
             console.error(response)
         }
 
@@ -59,10 +137,14 @@ app.controller("myCtrl", function($scope) {
             $scope.ranges.push(range)
         }
         
-        $scope.ranges.forEach(range => console.log(range.start + " - " + range.end))   
+        $scope.ranges.forEach(range => console.log(range.start + " - " + range.end)) 
+        
+        $scope.step = 1
     }
     
     $scope.process = async function() {
+        $scope.procesando = true
+
         const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
         let url = 'https://api.clockify.me/api/v1/workspaces/'+$scope.workspaceId+'/time-entries'
@@ -103,6 +185,9 @@ app.controller("myCtrl", function($scope) {
                 $scope.$apply()
             }
         }
+
+        $scope.procesando = false
+        $scope.$apply()
     }
 
 });

@@ -3,6 +3,10 @@ h2 {
     font-size: 22px;
 }
 
+small {
+    color: #666
+}
+
 .form-control {
     display: inline;
     width: unset;
